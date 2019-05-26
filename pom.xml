@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.kernja.factoryprovider</groupId>
+    <artifactId>factoryprovider</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <!-- hold our child modules -->
+    <modules>
+        <module>factoryprovider.core</module>
+        <module>factoryprovider.samplelog</module>
+        <module>factoryprovider.module</module>
+        <module>factoryprovider.example</module>
+    </modules>
+
+    <!-- ensure we're running under java 1.8 -->
+    <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+    </properties>
+
+    <!-- clear out the local maven repository -->
+    <!-- do NOT run this plugin during child build processes -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <!-- do NOT run this plugin during child build processes -->
+                <inherited>false</inherited>
+                <executions>
+                    <!-- do a repository clean when installing -->
+                    <execution>
+                        <id>purge-local-dependencies-install</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>purge-local-repository</goal>
+                        </goals>
+                    </execution>
+                    <!-- do a repository clean when cleaning -->
+                    <execution>
+                        <id>purge-local-dependencies-clean</id>
+                        <phase>clean</phase> <!--process-sources-->
+                        <goals>
+                            <goal>purge-local-repository</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- done to ensure that we're not including source code in the parent project -->
+    <packaging>pom</packaging>
+</project>
